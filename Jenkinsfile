@@ -14,8 +14,8 @@ pipeline {
                     branches: [[name: '*/main']],
                     extensions: [],
                     userRemoteConfigs: [[
-                        url: 'https://github.com/Fykio/cidemo.git',
-                        credentialsId: 'CI-Demo-GitHub-PAT' // Your GitHub credentials ID in Jenkins
+                        url: 'https://github.com/tegajunior/cidemo.git',
+                        credentialsId: 'github-cidemo' // Your GitHub credentials ID in Jenkins
                     ]]
                 ])
             }
@@ -31,7 +31,7 @@ pipeline {
         // Stage 3: Build Docker image
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t fykio/cidemo:v${BUILD_ID} .'
+                sh 'docker build -t tegajunior/cidemo:v${BUILD_ID} .'
             }
         }
 
@@ -39,8 +39,8 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                    docker.withRegistry('https://index.docker.io/v1/', 'DockerHub') {
-                        sh 'docker push fykio/cidemo:v${BUILD_ID}'
+                    docker.withRegistry('https://index.docker.io/v1/', 'DOCKERHUB') {
+                        sh 'docker push tegajunior/cidemo:v${BUILD_ID}'
                     }
                 }
             }
