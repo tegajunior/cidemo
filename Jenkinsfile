@@ -16,7 +16,9 @@ pipeline {
                 ])
             }
         }
-// Stage 2: Compile the application and resolve dependencies
+
+        
+        // Stage 2: Compile the application and resolve dependencies
         stage('Build with Maven') {
             steps {
                 sh 'mvn clean compile'
