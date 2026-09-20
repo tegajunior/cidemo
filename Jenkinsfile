@@ -1,10 +1,6 @@
 pipeline {
     agent any
 
-    // environment {
-    //     IMAGE_VERSION = sh 'read -p "Enter image version: " IMAGE_VERSION'
-    // }
-
     stages {
         // Stage 1: Checkout code from GitHub using GitHub PAT
         stage('Checkout Code') {
@@ -20,22 +16,34 @@ pipeline {
                 ])
             }
         }
-
-        // Stage 2: Package the application using Maven
-        stage('Package with Maven') {
+// Stage 2: Compile the application and resolve dependencies
+        stage('Build with Maven') {
             steps {
-                sh 'mvn clean package'
+                sh 'mvn clean compile'
+            }
+        }
+        // Stage 3: Run Unit Tests
+        stage('Unit Tests') {
+            steps {
+                sh 'mvn test'
             }
         }
 
-        // Stage 3: Build Docker image
+        // Stage 4: Package Application
+        stage('Package Application') {
+            steps {
+                sh 'mvn package -DskipTests'
+            }
+        }
+
+        // Stage 5: Build Docker image
         stage('Build Docker Image') {
             steps {
                 sh 'docker build -t tegajunior/cidemo:v${BUILD_ID} .'
             }
         }
 
-        // Stage 4: Push Docker image to Docker Hub
+        // Stage 6: Push Docker image to Docker Hub
         stage('Push Docker Image') {
             steps {
                 script {
